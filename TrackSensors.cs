@@ -7,6 +7,7 @@ using System.IO;
 public class TrackSensors : MonoBehaviour
 {
     private InputDevice headDevice;
+    private List<string> data = new List<string>();
 
     void Start()
     {
@@ -42,10 +43,17 @@ public class TrackSensors : MonoBehaviour
             headDevice.TryGetFeatureValue(CommonUsages.deviceAngularVelocity, out angularVelocity);
 
             Debug.Log("Acceleration: " + acceleration.ToString() + " " + "Angular Velocity: " + angularVelocity.ToString());
+            string entry = $"{Time.time},{acceleration.x},{acceleration.y},{acceleration.z},{angularVelocity.x},{angularVelocity.y},{angularVelocity.z}";
+data.Add(entry);
         }
         else
         {
             Debug.LogError("HMD device is not valid");
         }
+    }
+
+    void OnApplicationQuit()
+    {
+        System.IO.File.WriteAllLines("sensor_data.csv", data.ToArray());
     }
 }

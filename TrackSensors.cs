@@ -44,7 +44,7 @@ public class TrackSensors : MonoBehaviour
 
             Debug.Log("Acceleration: " + acceleration.ToString() + " " + "Angular Velocity: " + angularVelocity.ToString());
             string entry = $"{Time.time},{acceleration.x},{acceleration.y},{acceleration.z},{angularVelocity.x},{angularVelocity.y},{angularVelocity.z}";
-data.Add(entry);
+            data.Add(entry);
         }
         else
         {

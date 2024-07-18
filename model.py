@@ -18,7 +18,7 @@ data = []
 
 for file_path in glob.glob(file_pattern):
   file_name = os.path.basename(file_path)
-  if file_name.startswith('Archery') and 'session1' in file_name and 'repetition1' in file_name and ('p1_' in file_name or 'p2_' in file_name or 'p3_' in file_name):
+  if file_name.startswith('Archery') and 'session1' in file_name and 'repetition1' in file_name and ('p1_' in file_name or 'p2_' in file_name) and 'BothNormalizations' in file_name:
     df = pd.read_csv(file_path)
 
     data.append(df)
@@ -30,7 +30,6 @@ with pd.option_context('display.max_seq_items', None):
     print(df.head())
     print(df.tail())
 # %%
-
 def process_data(data, scenario):
   window_size = 10
   step_size = 1
@@ -61,13 +60,13 @@ def process_data(data, scenario):
   #print("X_train", X_train[:5])
   y_train = np.array(y_train)
   #print(y_train[:5])
-  y_train_encoded = to_categorical(y_train, num_classes=3)
+  y_train_encoded = to_categorical(y_train, num_classes=2)
   #print(y_train_encoded)
   #print("y_train", y_train[:5])
   X_test = np.array(X_test)
   X_test_reshaped = X_test.reshape(X_test.shape[0], X_test.shape[2], X_test.shape[3])
   y_test = np.array(y_test)
-  y_test_encoded = to_categorical(y_test, num_classes=3)
+  y_test_encoded = to_categorical(y_test, num_classes=2)
 
   return X_train_reshaped, y_train_encoded, X_test_reshaped, y_test_encoded
 
@@ -89,14 +88,16 @@ model.add(LSTM(100, activation='sigmoid', return_sequences=True))
 
 model.add(LSTM(100, activation='sigmoid'))
 
-model.add(Dense(3, activation='softmax'))
+model.add(Dense(2, activation='softmax'))
 
 model.compile(optimizer=Adam(learning_rate=0.001), loss='categorical_crossentropy', metrics=['accuracy'])
 
 model.summary()
 
-model.fit(X_train, y_train, epochs=10, batch_size=32, validation_data=(X_train, y_train))
+model.fit(X_train, y_train, epochs=500, batch_size=32, validation_data=(X_train, y_train))
 
 loss, accuracy = model.evaluate(X_test, y_test)
 print(f"Test Accuracy: {accuracy * 100:.2f}%")
+# %%
+#model.predict(X_train)
 # %%

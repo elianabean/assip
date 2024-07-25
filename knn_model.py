@@ -129,9 +129,9 @@ X_test = X_test.reshape(X_test.shape[0], -1)
 
 #print(X_train[0:2])
 
-scaler = StandardScaler()
+"""scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
+X_test = scaler.transform(X_test)"""
 
 # %%
 for n in [3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31]:
